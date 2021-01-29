@@ -9,8 +9,7 @@ const historyRouter = require('./routers/history');
 
 const app = express()
 
-mongoose.connect(process.env.MONGODB_URI
-                || 'mongodb+srv://mostafa:hIeJG6rXzsRoY69h@cluster0.kor3k.mongodb.net/online-banking-demo', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
     useCreateIndex: true,
