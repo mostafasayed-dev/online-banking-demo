@@ -35,6 +35,8 @@ export class AuthService{
     }
 
     login(username: string, password: string){
+        console.log('api_url', api_url);
+        console.log('environment', environment.production);
         // this.loginStatusListener.next(true)
         // localStorage.setItem('loggedIn','1')
         // this.router.navigate(['/accounts'])
