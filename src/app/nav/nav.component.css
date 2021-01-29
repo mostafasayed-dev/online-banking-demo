@@ -1,0 +1,16 @@
+nav {
+    /* background-color: #2980b9; */
+    background-color: #19547b;
+}
+
+span {
+    color: white;
+}
+
+a.navbar-brand {
+    color: white;
+}
+
+a.navbar-brand:hover {
+    color: white;
+}

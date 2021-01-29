@@ -1,0 +1,11 @@
+<input 
+    name="amount"
+    type="text" 
+    class="form-control form-control-sm" 
+    (focus)="onFocus(this)"
+    (blur)="onBlur(this)"
+    [(ngModel)]="amount"
+    (ngModelChange) = "textChanged($event)"
+    [disabled] = "ctrl_disabled"
+    [value] = "amount"
+    autocomplete="off">

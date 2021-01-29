@@ -1,0 +1,65 @@
+button.btn-transfer {
+    /* display: block; */
+    /* margin-top: 30px;
+    margin-bottom: 55px; */
+    /* margin-left: auto;
+    margin-right: auto; */
+    margin-bottom: 55px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    /* width: 40%; */
+    /* background-color: #19547b;
+    color: white; */
+}
+
+i.uncheck {
+    margin-left: 5px;
+    font-size: large;
+    color: rgb(200, 0, 0);
+    animation: fadeIn 0.3s ease-in both;
+}
+
+
+
+i.check {
+    margin-left: 5px;
+    font-size: large;
+    color: green;
+    animation: fadeIn 0.3s ease-in both;
+}
+
+i.none {
+    margin-left: 5px;
+    font-size: x-large;
+    color: #fff;
+}
+
+span.hint {
+    color: rgb(155, 155, 155);
+    font-size: small;
+}
+
+/* button.btn-transfer:hover {
+    background-color: #2471A3;
+    color: white;
+} */
+
+/* input[type="text"]:disabled {
+    background: #dddddd;
+    background: #f5c6cb;
+} */
+
+.modal-header {
+    background-color: #ff5365;
+}
+
+.account_details div{
+    animation: fadeIn 0.5s ease-in both;
+}
+.account_details div:nth-child(2) {
+	animation-delay: 0.5s;
+}
+.account_details div:nth-child(3) {
+	animation-delay: 1s;
+}
+

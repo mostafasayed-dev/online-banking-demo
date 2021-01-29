@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">
+        {{message_title}}
+        <i class="bi bi-check-circle-fill"></i>
+    </h4>
+    <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+</div>
+<div class="modal-body">
+    <!-- <div class="row">
+        <div class="col">
+            • From Account<br>
+            • To Account<br>
+            • Amount<br>
+            • Currency<br>
+        </div>
+        <div class="col">
+            100000000787<br>
+            100000000999<br>
+            105.00<br>
+            USD<br>
+        </div>
+    </div> -->
+    <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">{{data1[0]}}</th>
+            <td>{{data2[0]}}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{data1[1]}}</th>
+            <td>{{data2[1]}}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{data1[2]}}</th>
+            <td colspan="2">{{data2[2]}}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{data1[3]}}</th>
+            <td colspan="2">{{data2[3]}}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{data1[4]}}</th>
+            <td colspan="2">{{data2[4]}}</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn" (click)="closeModal()">{{button1_text}}</button>
+</div>

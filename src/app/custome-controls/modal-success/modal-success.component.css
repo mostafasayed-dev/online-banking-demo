@@ -1,0 +1,18 @@
+i {
+    color: rgb(0, 100, 0);
+}
+
+/* to be centered */
+button {
+    display: block;
+    background-color: rgb(0, 100, 0);
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 100px;
+}
+
+button:hover {
+    color: white;
+    background-color: rgb(0, 110, 0);
+}

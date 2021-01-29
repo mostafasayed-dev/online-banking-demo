@@ -1,0 +1,89 @@
+<div class="container">
+    <app-page-header [header_text] = "isAccountHistoryAvailable? 'Account History' : 'My Accounts'"></app-page-header>
+
+    <app-pagination *ngIf="isAccountHistoryAvailable"
+    [totalItemsCountChanged]="totalItemsCountChanged_history.asObservable()"
+    [itemsPerPage]="itemsPerPage_history"
+    (currentPageChanged)="currentHistoryPageChanged($event)"></app-pagination>
+
+    <table mat-table [dataSource]="accountHistoryList" class="mat-elevation-z8" *ngIf="!isLoading && isAccountHistoryAvailable">
+      <!-- Date -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> 
+          {{element.date}}</td>
+      </ng-container>
+      <!-- Transaction -->
+      <ng-container matColumnDef="transaction">
+        <th mat-header-cell *matHeaderCellDef> Transaction </th>
+        <td mat-cell *matCellDef="let element"> 
+          {{element.transaction}}</td>
+      </ng-container>
+      <!-- Amount -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef> To Amount </th>
+        <td mat-cell *matCellDef="let element"> 
+          {{element.amount}} {{element.currency}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+    </table>
+
+    <div class="row center">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <button 
+          *ngIf="isAccountHistoryAvailable"
+          class="btn btn-default back" 
+          (click)="back()">Back</button>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+
+    <app-pagination *ngIf="!isAccountHistoryAvailable"
+    [totalItemsCountChanged]="totalItemsCountChanged_accounts.asObservable()"
+    [itemsPerPage]="itemsPerPage_accounts"
+    (currentPageChanged)="currentAccountPageChanged($event)"></app-pagination>
+
+    <table mat-table [dataSource]="rim_accounts" class="mat-elevation-z8" *ngIf="!isLoading && !isAccountHistoryAvailable">
+      <!-- Account No. -->
+      <ng-container matColumnDef="account_no">
+        <th mat-header-cell *matHeaderCellDef> Account No. </th>
+        <td mat-cell *matCellDef="let element"> 
+          <strong>{{element.account_no}}</strong> </td>
+      </ng-container>
+      <!-- Account Type -->
+      <ng-container matColumnDef="account_type">
+        <th mat-header-cell *matHeaderCellDef> Account Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.account_type}} </td>
+      </ng-container>
+      <!-- Currency -->
+      <ng-container matColumnDef="account_currency">
+        <th mat-header-cell *matHeaderCellDef> Currency </th>
+        <td mat-cell *matCellDef="let element"> {{element.account_currency}} </td>
+      </ng-container>
+      <!-- Act. Balance -->
+      <ng-container matColumnDef="actual_balance">
+        <th mat-header-cell *matHeaderCellDef> Act. Balance </th>
+        <td mat-cell *matCellDef="let element"> {{element.actual_balance.toFixed(2)}} </td>
+      </ng-container>
+      <!-- Avail. Balance -->
+      <ng-container matColumnDef="available_balance">
+        <th mat-header-cell *matHeaderCellDef> Avail. Balance </th>
+        <td mat-cell *matCellDef="let element"> {{element.available_balance.toFixed(2)}} </td>
+      </ng-container>
+      <!-- Details -->
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> ... </th>
+        <td mat-cell *matCellDef="let element">  
+          <button class="btn btn-default details" (click)="getAccountDetails(element.account_no)">Details</button>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+      [ngClass] = "[row.available_balance <= 0 ? 'table-danger' : '']"></tr>
+    </table>
+</div>
+<app-spinner-x *ngIf="isLoading"></app-spinner-x>

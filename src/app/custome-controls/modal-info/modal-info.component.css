@@ -1,0 +1,29 @@
+i {
+    color: #2471A3;
+}
+
+/* to be centered */
+button {
+    display: block;
+    background-color: #2471A3;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+button:hover {
+    background-color: #3498DB;
+    color: white;
+}
+
+.modal-header {
+
+    background-color: #19547b;
+}
+
+.modal-header h4,
+i {
+    color: #fff;
+}
+

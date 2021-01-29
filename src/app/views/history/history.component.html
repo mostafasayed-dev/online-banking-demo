@@ -1,0 +1,51 @@
+<div class="container">
+    <app-page-header [header_text] = "'History'"></app-page-header>
+    
+    <app-pagination 
+    [totalItemsCountChanged]="totalItemsCountChanged.asObservable()"
+    [itemsPerPage]="itemsPerPage"
+    (currentPageChanged)="currentPageChanged($event)"></app-pagination>
+
+    <table mat-table [dataSource]="historyList" class="mat-elevation-z8" *ngIf="!isLoading">
+          <!-- Date -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef> Date </th>
+            <td mat-cell *matCellDef="let element"> 
+              {{element.createdAt}}</td>
+          </ng-container>
+          <!-- Transaction -->
+          <ng-container matColumnDef="transaction">
+            <th mat-header-cell *matHeaderCellDef> Transaction </th>
+            <td mat-cell *matCellDef="let element"> 
+              {{element.transaction}}</td>
+          </ng-container>
+          <!-- From Account  -->
+          <ng-container matColumnDef="from_account">
+            <th mat-header-cell *matHeaderCellDef> From Account </th>
+            <td mat-cell *matCellDef="let element"> 
+              {{element.from_account? element.from_account: ''}} {{element.from_account_type? element.from_account_type.substring(0,3): ''}}</td>
+          </ng-container>
+          <!-- To Account -->
+          <ng-container matColumnDef="to_account">
+            <th mat-header-cell *matHeaderCellDef> To Account </th>
+            <td mat-cell *matCellDef="let element"> 
+              {{element.to_account? element.to_account: ''}} {{element.to_account_type? element.to_account_type.substring(0,3): ''}}</td>
+          </ng-container>
+          <!-- From Amount -->
+          <ng-container matColumnDef="from_amount">
+            <th mat-header-cell *matHeaderCellDef> From Amount </th>
+            <td mat-cell *matCellDef="let element"> 
+              {{element.from_amount? element.from_amount: ''}} {{element.from_currency? element.from_currency: ''}}</td>
+          </ng-container>
+          <!-- To Amount -->
+          <ng-container matColumnDef="to_amount">
+            <th mat-header-cell *matHeaderCellDef> To Amount </th>
+            <td mat-cell *matCellDef="let element"> 
+              {{element.to_amount? element.to_amount: ''}} {{element.to_currency? element.to_currency: ''}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <app-spinner-x *ngIf="isLoading"></app-spinner-x>
+</div>

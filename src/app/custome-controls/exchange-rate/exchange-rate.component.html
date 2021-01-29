@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-md-4">
+        <label for="buyRate">
+            Buy Rate
+            <div class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading == true"></div>
+        </label>
+        <input 
+        id="buyRate"
+        name="buyRate"
+        type="text" 
+        class="form-control"
+        [value]="buyRate == 0? '' : buyRate"
+        disabled>
+    </div>
+    <div class="col-md-4">
+        <label for="currency">Currency</label>
+        <input 
+        id="currency"
+        name="currency"
+        type="text" 
+        class="form-control"
+        [value] = "toCurrency"
+        disabled>
+    </div>
+    <div class="col-md-4">
+        <label for="sellRate">
+            Sell Rate
+            <div class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading"></div>
+        </label>
+        <input 
+        id="sellRate"
+        name="sellRate"
+        type="text" 
+        class="form-control"
+        [value]="sellRate == 0? '' : sellRate"
+        disabled>
+    </div>
+</div>

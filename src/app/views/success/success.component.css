@@ -1,0 +1,21 @@
+.center {
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+    justify-content: center;
+    width: 100%;
+    min-height: 75%;
+}
+
+i {
+    font-size: 150px;
+    animation: fadeIn 1s ease-in both;
+}
+
+.check {
+    color: green;
+}
+
+.uncheck {
+    color: rgb(200, 0, 0);
+}

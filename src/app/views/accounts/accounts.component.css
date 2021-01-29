@@ -1,0 +1,60 @@
+mat-card {
+    background-color: rgb(250, 250, 250);
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+button.details {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 14px;
+}
+
+button.back {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.cards-container:last-child {
+    margin-bottom: 45px;
+}
+
+mat-card-content {
+    margin-bottom: 0px;
+}
+
+div.container {
+    /* margin-top: 20px; */
+}
+
+p.available-balance-greater-than-0 {
+    color:green;
+}
+
+p.available-balance-less-than-0,
+td.available-balance-less-than-0 {
+    color: rgb(200, 0, 0);
+}
+
+
+p.actual-balance {
+    color: #19547b;
+}
+
+/* button.btn-details {
+    background-color: #19547b;
+    color: white;
+} */
+
+.center {
+    text-align: center;
+}
+
+.back {
+    margin-top: 15px;
+}

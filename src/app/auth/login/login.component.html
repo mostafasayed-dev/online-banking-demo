@@ -1,0 +1,46 @@
+<div class="form-wrapper">
+    <div class="form-content">
+        <h3>Please Login</h3>
+        <div class="alert alert-danger" role="alert" *ngIf="!loginStatus">
+            Invalid Username or Password
+        </div>
+        <form (submit) = "onLogin(loginForm)" #loginForm="ngForm">
+            <div class="mb-3">
+                <!-- <label for="username">Username</label> -->
+                <input 
+                    type="text" 
+                    id="username"
+                    name="username" 
+                    placeholder="Username"
+                    class="form-control"
+                    #username="ngModel"  
+                    ngModel
+                    (focus)="username_focus=true" (blur)="username_focus=false"
+                    [ngStyle] = "(username.touched && username.invalid) || (loginForm.submitted && username.invalid) ? 
+                                    {'border-color': '#f5c6cb'} 
+                                    : {'border-color': '#ced4da'}"
+                    [ngClass]="{'focus-error': username_focus && ((username.touched && username.invalid) || (loginForm.submitted && username.invalid))}"
+                    autocomplete="off"
+                    required>
+            </div>
+            <div class="mb-3">
+                <!-- <label for="password">Password</label> -->
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password"
+                    placeholder="Password"
+                    class="form-control" 
+                    #password="ngModel"  
+                    ngModel 
+                    (focus)="password_focus=true" (blur)="password_focus=false"
+                    [ngStyle] = "(password.touched && password.invalid) || (loginForm.submitted && password.invalid) ? 
+                                    {'border-color': '#f5c6cb'} 
+                                    : {'border-color': '#ced4da'}"
+                    [ngClass]="{'focus-error': password_focus && ((password.touched && password.invalid) || (loginForm.submitted && password.invalid))}"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-login">Login</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,253 @@
+<div class="container" *ngIf="!isLoading">
+    <app-page-header [header_text] = "'Account To Account Transfer'"></app-page-header>
+    <div class="alert alert-danger" role="alert" *ngIf="!transfer_succeeded">
+        <strong>Transfer Failed! </strong>—{{transfer_error_message}}
+    </div>
+    <form (submit) = "transfer(transferForm)" #transferForm="ngForm">
+        <!-- transfer type -->
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="transfer_type">Transfer Type</label>
+                    <div class="d-flex justify-content-start">
+                        <select 
+                            class="form-select form-control-sm"
+                            id="transfer_type"
+                            name="transfer_type"
+                            [(ngModel)]= "selected_transfer_type_value"
+                            required>
+                            <option value="-1" selected>Choose...</option>
+                            <option value="0">Internal Transfer</option>
+                            <option disabled value="1">External Transfer</option>
+                        </select>
+                        <i [ngClass]="(transferForm.controls.transfer_type?.touched 
+                        && transferForm.value.transfer_type == -1) ? 'bi bi-x-circle uncheck' 
+                        : (transferForm.value.transfer_type > -1) ? 'bi bi-check-circle check' : 'bi bi-check-circle none'"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- from account -->
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="from_account">From Account</label>
+                    <div class="d-flex justify-content-start">
+                        <select 
+                            class="form-select form-control-sm" 
+                            id="from_account"
+                            name="from_account"
+                            (change) = "getAccountFromData($event)"
+                            [(ngModel)] = "selected_from_account_no_value"
+                            required>
+                            <option value="-1" selected>Choose...</option>
+                            <option *ngFor="let account of accounts"
+                            [disabled] = "account.available_balance == 0"
+                            [ngStyle] = "account.available_balance == 0 ? {'color': 'rgb(200, 0, 0)'} : {} "
+                            >{{account.account_no}} - {{account.account_currency}}</option>
+                        </select>
+                        <i [ngClass]="(transferForm.controls.from_account?.touched && transferForm.value.from_account == -1) ? 'bi bi-x-circle uncheck' 
+                                        : (transferForm.value.from_account != -1) ? 'bi bi-check-circle check' : 'bi bi-check-circle none'"></i>
+                    </div>
+                </div>
+                <!-- to account -->
+                <div class="col-md-6">
+                    <label for="to_account">To Account</label>
+                    <div class="d-flex justify-content-start">
+                        <select 
+                            class="form-select form-control-sm" 
+                            id="to_account"
+                            name="to_account"
+                            (change) = "getAccountToData($event)"
+                            [(ngModel)] = "selected_to_account_no_value"
+                            required>
+                            <option value="-1" selected>Choose...</option>
+                            <option *ngFor="let account of accounts">{{account.account_no}} - {{account.account_currency}}</option>
+                        </select>
+                        <i [ngClass]="(transferForm.controls.to_account?.touched && transferForm.value.to_account == -1) ? 'bi bi-x-circle uncheck' 
+                                        : (transferForm.value.to_account != -1) ? 'bi bi-check-circle check' : 'bi bi-check-circle none'"></i>
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-6" *ngIf="from_account_selected" hidden>
+                    <div class="row account_details">
+                        <div class="col-sm-4">
+                            <label for="from_account_type">Account Type</label>
+                            <input 
+                                type="text" 
+                                id="from_account_type"
+                                name="from_account_type"
+                                class="form-control"
+                                [ngModel]="from_account_type"
+                                disabled>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="from_account_available_balance">Available Balance</label>
+                            <input 
+                                type="text" 
+                                class="form-control"
+                                id="from_account_available_balance" 
+                                name="from_account_available_balance"
+                                [ngModel]="from_account_available_balance"
+                                disabled>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="from_account_acctual_balance">Actual Balance</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="from_account_acctual_balance" 
+                                name="from_account_acctual_balance"
+                                [ngModel]="from_account_acctual_balance"
+                                disabled>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <!-- to account -->
+        <!-- <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="to_account">To Account</label>
+                    <div class="d-flex justify-content-start">
+                        <select 
+                            class="form-select form-control-sm" 
+                            id="to_account"
+                            name="to_account"
+                            (change) = "getAccountToData($event)"
+                            [(ngModel)] = "selected_to_account_no_value"
+                            required>
+                            <option value="-1" selected>Choose...</option>
+                            <option *ngFor="let account of accounts">{{account.account_no}} - {{account.account_currency}}</option>
+                        </select>
+                        <i [ngClass]="(transferForm.controls.to_account?.touched && transferForm.value.to_account == -1) ? 'bi bi-x-circle uncheck' 
+                                        : (transferForm.value.to_account != -1) ? 'bi bi-check-circle check' : 'bi bi-check-circle none'"></i>
+                    </div>
+                </div>
+                <div class="col-md-6" *ngIf="to_account_selected" hidden>
+                    <div class="row account_details">
+                        <div class="col-sm-4">
+                            <label for="to_account_type">Account Type</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="to_account_type" 
+                                name="to_account_type"
+                                [ngModel]="to_account_type"
+                                disabled>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="to_account_available_balance">Available Balance</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="to_account_available_balance" 
+                                name="to_account_available_balance"
+                                [ngModel]="to_account_available_balance"
+                                disabled>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="to_account_acctual_balance">Actual Balance</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="to_account_acctual_balance" 
+                                name="to_account_acctual_balance"
+                                [ngModel]="to_account_acctual_balance"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- amount -->
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="transfer_amount">From Amount</label>
+                    <div class="d-flex justify-content-start">
+                        <app-money-field
+                            id="transfer_amount"
+                            name="transfer_amount"
+                            (amountChanged) = "setAmount($event)"
+                            [(currency)]="from_account_currency"
+                            [currencyChanged]="currencyChangedSubject.asObservable()"
+                            [is_base_currency]="true"></app-money-field>
+                            <i [ngClass]="transfer_amount_value == 0 ? 'bi bi-x-circle uncheck' : (transfer_amount_value != 0 && transfer_amount_value != undefined) ? 'bi bi-check-circle check' : 'bi bi-check-circle none'"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="transfer_amount_to">To Amount</label>
+                    <div class="d-flex justify-content-start">
+                        <app-money-field
+                        id="transfer_amount_to"
+                        name="transfer_amount_to"
+                        (amountChanged) = "setToAmount($event)"
+                        [(currency)]="to_account_currency"
+                        [(other_currency)] = "from_account_currency"
+                        [currencyChanged]="currencyToChangedSubject.asObservable()"
+                        [amountValueChanged] = "amountToChangedSubject.asObservable()"
+                        [ctrl_disabled]="true"
+                        [is_base_currency] = "false"></app-money-field>      
+                    </div>            
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+            </div>
+        </div>
+        <!-- description -->
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="description">Description <span class="hint">(Optional)</span></label>
+                    <div class="d-flex justify-content-start">
+                        <input 
+                        id="description"
+                        name="description"
+                        type="text" 
+                        class="form-control form-control-sm" 
+                        [(ngModel)] = "description_value">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <mat-divider></mat-divider>
+        </div> -->
+        <!-- submit -->
+        <div class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default btn-transfer btn-block" 
+                        type="submit"
+                        (click)="showInfoMessage(infoMessageTemplate)"
+                        [disabled] = "transferForm.value.transfer_type == -1 ||
+                                        transferForm.value.from_account == -1 ||
+                                        transferForm.value.to_account == -1 ||
+                                        transfer_amount_value == 0 || transfer_amount_value == undefined">
+                    Transfer
+                    <!-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Transfer...</span> -->
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<app-spinner-x *ngIf="isLoading"></app-spinner-x>
+<!-- success message -->
+<ng-template #successMessageTemplate>
+    <app-modal-success>
+    </app-modal-success>
+</ng-template>
+<!-- Info message -->
+<ng-template #infoMessageTemplate>
+    <app-modal-info [data1]="['From Account', 'To Account', 'From Amount', 'To Amount', 'Trasaction Date']"
+                    [data2]="data2"
+                    [message_title] = "info_message_title"
+                    [button1_text] = "info_message_button_text"
+                    (confirmed) = "transferConfirmed($event, successMessageTemplate)">
+    </app-modal-info>
+</ng-template>

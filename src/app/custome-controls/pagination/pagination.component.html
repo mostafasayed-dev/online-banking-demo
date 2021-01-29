@@ -1,0 +1,15 @@
+<div class="center">
+    <div class="pagination">
+      <a (click)="setpBackward()" [ngClass]= "currentPage == 1 ? 'disabled' : ''">&laquo;</a>
+      <a *ngIf="this.paginationCountObj?.length >= 1" 
+          class="page-item" [ngClass]= "currentPage == (1 + additinalPages) ? 'active' : ''"
+          (click)="paginationItemClicked(0 + additinalPages)">{{ additinalPages + 1 }}</a>
+      <a *ngIf="this.paginationCountObj?.length >= 2"
+          class="page-item" [ngClass]= "currentPage == (2 + additinalPages) ? 'active' : ''"
+          (click)="paginationItemClicked(1 + additinalPages)">{{ additinalPages + 2 }}</a>
+      <a *ngIf="this.paginationCountObj?.length >= 3"
+          class="page-item" [ngClass]= "currentPage == (3 + additinalPages) ? 'active' : ''"
+          (click)="paginationItemClicked(2 + additinalPages)">{{ additinalPages + 3 }}</a>
+      <a (click)="setpForward()" [ngClass]= "currentPage == this.paginationCountObj?.length ? 'disabled' : ''">&raquo;</a>
+    </div>
+</div>
