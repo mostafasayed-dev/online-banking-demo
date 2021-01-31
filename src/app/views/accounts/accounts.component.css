@@ -38,9 +38,9 @@ mat-card-content {
     margin-bottom: 0px;
 }
 
-div.container {
-    /* margin-top: 20px; */
-}
+/* div.container {
+    margin-top: 20px;
+} */
 
 p.available-balance-greater-than-0 {
     color:green;
