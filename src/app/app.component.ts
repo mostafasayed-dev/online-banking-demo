@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { MediaQueryService } from './services/media-query.service';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +9,11 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+              private mediaQueryService: MediaQueryService) {}
 
   ngOnInit(): void {
+    this.mediaQueryService.startSubscripbeForBreakpoint();
     this.authService.autoAuthenticateUser();
   }
   //title = 'online-banking-demo-v1';

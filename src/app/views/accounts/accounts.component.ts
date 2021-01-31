@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { AccountHistory } from 'src/app/models/account-history.model';
 import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { HistoryService } from 'src/app/services/history.service';
+import { MediaQueryService } from 'src/app/services/media-query.service';
 import { Account } from '../../models/account.model'
 
 @Component({
@@ -12,7 +13,7 @@ import { Account } from '../../models/account.model'
   styleUrls: ['./accounts.component.css']
 })
 
-export class AccountsComponent implements OnInit {
+export class AccountsComponent implements OnInit, OnDestroy {
 
   // as Subject doesn't fire the totalItemsCountChangedSubscription subject in pagination component
   // It is actually a better idea to use BehaviorSubject. 
@@ -38,9 +39,13 @@ export class AccountsComponent implements OnInit {
                                 'transaction', 
                                 'amount'];
 
+  deviceWidthListener: Subscription;
+  deviceWidth : number;
+
   constructor(private authService: AuthService, 
               private accountService: AccountService,
-              private historyService: HistoryService) { }
+              private historyService: HistoryService,
+              private mediaQueryService: MediaQueryService) { }
 
   ngOnInit() {
     // this.isLoading = true;
@@ -53,6 +58,14 @@ export class AccountsComponent implements OnInit {
 
     //   }
     // })
+    this.deviceWidth = this.mediaQueryService.getDeviceWidth();
+    this.deviceWidthListener = this.mediaQueryService.getDeviceWidthListener().subscribe(
+      width => {
+        this.deviceWidth = width;
+        console.log(width);
+      }
+    )
+    console.log(this.deviceWidth)
     this.getRimAccounts();
   }
 
@@ -101,6 +114,10 @@ export class AccountsComponent implements OnInit {
     this.isAccountHistoryAvailable = false;
     this.selectedAccount = "";
     this.currentAccountPageChanged(1);
+  }
+
+  ngOnDestroy(): void {
+    this.deviceWidthListener.unsubscribe();
   }
 
 }

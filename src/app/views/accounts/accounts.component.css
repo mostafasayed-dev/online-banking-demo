@@ -7,6 +7,16 @@ table {
     width: 100%;
 }
 
+/* .table-container {
+    overflow: auto;
+} */
+
+@media only screen and (max-width: 480px){
+    table th, table td{
+        padding-left: 20px;
+    }
+}
+
 button.details {
     padding-top: 2px;
     padding-bottom: 2px;
