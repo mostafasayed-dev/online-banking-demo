@@ -17,8 +17,8 @@ h2 {
 	}
 }
 
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 465px){
     h2{
-		font-size: 26px;
+		font-size: 27px;
 	}
 }

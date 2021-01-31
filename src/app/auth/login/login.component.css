@@ -30,6 +30,12 @@ button.btn-login {
     box-shadow: 0 0 0 0.2rem rgba(221, 62, 123, 0.25)
 }
 
+@media only screen and (max-width: 465px){
+    .form-content {
+        width: 90%;
+    }
+}
+
 /* button {
     margin-top: 20px;
 } */

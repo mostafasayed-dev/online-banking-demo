@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit {
   username_focus = false;
   password_focus = false;
 
+  isLoading = false;
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
@@ -33,11 +35,14 @@ export class LoginComponent implements OnInit {
 
   onLogin(form: NgForm){
     // console.log(form)
+    this.isLoading = true;
     if(form.invalid){
+      this.isLoading = false;
       return;
     }else{
       this.authService.login(form.value.username, form.value.password)
     }
+    this.isLoading = false;
   }
 
 }

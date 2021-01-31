@@ -47,7 +47,6 @@ export class NavComponent implements OnInit, OnDestroy {
         this.loggedIn = status
         // console.log(this.loggedIn)
         if(this.loggedIn){// if user authenticated
-          console.log("we are here 1")
           const rim_no = this.authService.getRimNumber()
           this.rimService.getRimDataByRimNumber(parseInt(rim_no)).subscribe(rim => {
             //console.log(rim)

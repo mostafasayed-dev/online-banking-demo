@@ -19,3 +19,15 @@ i {
 .uncheck {
     color: rgb(200, 0, 0);
 }
+
+@media only screen and (max-width: 465px){
+    h1{
+        font-size: 30px;
+    }
+}
+
+@media only screen and (max-width: 385px){
+    h1{
+        font-size: 25px;
+    }
+}

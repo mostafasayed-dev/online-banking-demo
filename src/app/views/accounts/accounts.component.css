@@ -11,7 +11,7 @@ table {
     overflow: auto;
 } */
 
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 465px){
     table th, table td{
         padding-left: 20px;
     }

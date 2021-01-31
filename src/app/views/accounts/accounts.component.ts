@@ -62,10 +62,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.deviceWidthListener = this.mediaQueryService.getDeviceWidthListener().subscribe(
       width => {
         this.deviceWidth = width;
-        console.log(width);
       }
     )
-    console.log(this.deviceWidth)
     this.getRimAccounts();
   }
 
@@ -86,6 +84,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   getAccountDetails(account_no: string){
+    this.currentPage_history = 1;
     this.getAcountHistory(account_no);
   }
 

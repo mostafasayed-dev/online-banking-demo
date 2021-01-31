@@ -40,7 +40,9 @@
                     [ngClass]="{'focus-error': password_focus && ((password.touched && password.invalid) || (loginForm.submitted && password.invalid))}"
                     required>
             </div>
-            <button type="submit" class="btn btn-login">Login</button>
+            <button type="submit" class="btn btn-login" [disabled]="isLoading">Login
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isLoading"></span>
+            </button>
         </form>
     </div>
 </div>
