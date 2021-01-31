@@ -62,8 +62,8 @@
         </ng-container>
         <!-- Currency -->
         <ng-container matColumnDef="account_currency">
-          <th mat-header-cell *matHeaderCellDef> Currency </th>
-          <td mat-cell *matCellDef="let element"> {{element.account_currency}} </td>
+          <th mat-header-cell *matHeaderCellDef [hidden]="deviceWidth <= 465"> Currency </th>
+          <td mat-cell *matCellDef="let element" [hidden]="deviceWidth <= 465"> {{element.account_currency}} </td>
         </ng-container>
         <!-- Act. Balance -->
         <ng-container matColumnDef="actual_balance">
@@ -73,13 +73,14 @@
         <!-- Avail. Balance -->
         <ng-container matColumnDef="available_balance">
           <th mat-header-cell *matHeaderCellDef> Avail. Balance </th>
-          <td mat-cell *matCellDef="let element"> {{element.available_balance.toFixed(2)}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.available_balance.toFixed(2)}} {{deviceWidth <= 465 ? element.account_currency : ""}} </td>
+          <!-- <td mat-cell *matCellDef="let element" [hidden]=""> {{element.available_balance.toFixed(2)}} {{element.account_currency}}</td> -->
         </ng-container>
         <!-- Details -->
         <ng-container matColumnDef="details">
           <th mat-header-cell *matHeaderCellDef> ... </th>
           <td mat-cell *matCellDef="let element">  
-            <button class="btn btn-default details" (click)="getAccountDetails(element.account_no)">Details</button>
+            <button class="btn btn-default details" (click)="getAccountDetails(element.account_no)">{{ deviceWidth > 465 ? "Details" : "..."}}</button>
           </td>
         </ng-container>
       

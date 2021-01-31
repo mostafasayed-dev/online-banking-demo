@@ -8,3 +8,9 @@ div{
     /* background-color: #2980b9; */
     background-color: #19547b;
 }
+
+@media only screen and (max-width: 480px){
+    p{
+		font-size:12px;
+	}
+}
