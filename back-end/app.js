@@ -9,6 +9,9 @@ const historyRouter = require('./routers/history');
 
 const app = express()
 
+const frontendDir = __dirname + "/angular-app/";
+app.use(express.static(frontendDir));
+
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
@@ -44,7 +47,13 @@ app.use("/api/transfers", transferRouter);
 app.use("/api/rates", ratesRouter);
 app.use('/api/history', historyRouter);
 
-const frontendDir = __dirname + "/angular-app/";
-app.use(express.static(frontendDir));
+// to solve refresh page issue
+app.get("/", (req, res) => {
+    res.sendFile(frontendDir + 'index.html')
+})
+
+app.get("/*", (req, res) => {
+    res.sendFile(frontendDir + 'index.html')
+})
 
 module.exports = app;
