@@ -1,0 +1,34 @@
+i.uncheck {
+    margin-left: 5px;
+    font-size: large;
+    color: rgb(200, 0, 0);
+    animation: fadeIn 0.3s ease-in both;
+}
+
+i.check {
+    margin-left: 5px;
+    font-size: large;
+    color: green;
+    animation: fadeIn 0.3s ease-in both;
+}
+
+i.none {
+    margin-left: 5px;
+    font-size: large;
+    color: #fff;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+  
+.flex-item-left {
+    margin-right: 29px;
+    flex: 50%;
+}
+  
+ .flex-item-right {
+    margin-right: 29px;
+    flex: 50%;
+}

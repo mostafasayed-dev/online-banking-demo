@@ -1,0 +1,26 @@
+<div class="flex-container">
+    <div class="flex-item-left">
+        <label for="from_amount">From Amount</label>
+        <input
+            id="from_amount"
+            name="from_amount"
+            type="text"
+            [(ngModel)]="fromFullText"
+            (focus)="onFocus_FromText(this)"
+            (ngModelChange) = "onTextChanged_FromText($event)"
+            (blur)="onBlur_FromText(this)"
+            class="form-control form-control-sm"
+            autocomplete="off">
+    </div>
+    <div class="flex-item-right">
+        <label for="to_amount">To Amount</label>
+            <input
+            id="to_amount"
+            name="to_amount"
+            type="text"
+            class="form-control form-control-sm"
+            [value]="toFullText"
+            [disabled]="true"
+            autocomplete="off">
+    </div>
+</div>

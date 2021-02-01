@@ -44,6 +44,7 @@ export class MoneyComponent implements OnInit, OnDestroy {
   }
 
   calculateRates(currency, amount){
+    console.log('other_currency',this.other_currency)
     if(currency && amount){
       if(this.other_currency && currency == this.other_currency){
         const newAmount = <any>amount;
@@ -51,6 +52,7 @@ export class MoneyComponent implements OnInit, OnDestroy {
         this.amount = parseFloat(newAmount.toString()).toFixed(2) + " " + this.currency;
       }
       else{
+        console.log('1')
         this.ratesService.getRate(currency).subscribe(
           rate => {
             let buy_rate = rate.buy_rate
@@ -58,6 +60,7 @@ export class MoneyComponent implements OnInit, OnDestroy {
             let is_base_currency = rate.is_base_currency
             if(is_base_currency){
               if(this.other_currency){
+                console.log('2')
                 this.ratesService.getRate(this.other_currency).subscribe(
                   other_rate => {
                     buy_rate = other_rate.buy_rate
@@ -73,6 +76,7 @@ export class MoneyComponent implements OnInit, OnDestroy {
             }
             else{
               if(this.currency){
+                console.log('3',currency)
                 const newAmount = <any>amount / <any>sell_rate
                 this.amountChanged.emit(parseFloat(newAmount.toString()).toFixed(2))//notify parent that amount has been changed
                 this.amount = parseFloat(newAmount.toString()).toFixed(2) + " " + this.currency
@@ -85,6 +89,7 @@ export class MoneyComponent implements OnInit, OnDestroy {
   }
 
   changeCurrency(currency){
+    console.log('changeCurrency', currency)
     if(this.amount == "" || currency == ""){
       this.amount = "0.00"
     }
