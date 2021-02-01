@@ -9,7 +9,7 @@ import { TransfersComponent } from './views/transfers/transfers.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SpinnerXComponent } from './custome-controls/spinner-x/spinner-x.component';
 import { PageHeaderComponent } from './custome-controls/page-header/page-header.component';
@@ -23,6 +23,13 @@ import { ExchangeRateComponent } from './custome-controls/exchange-rate/exchange
 import { SuccessComponent } from './views/success/success.component';
 import { HistoryComponent } from './views/history/history.component';
 import { PaginationComponent } from './custome-controls/pagination/pagination.component';
+import { TranslateModule, TranslateLoader} from '@ngx-translate/core'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+
+export function HttpLoaderFactory(http: HttpClient){
+  return new TranslateHttpLoader(http);
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +56,13 @@ import { PaginationComponent } from './custome-controls/pagination/pagination.co
     HttpClientModule,
     AngularMaterialModule,
     NgxBootstrapModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [ModalSuccessComponent, ModalInfoComponent],
   bootstrap: [AppComponent]
