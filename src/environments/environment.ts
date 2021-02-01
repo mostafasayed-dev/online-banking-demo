@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  api_url: "http://localhost:3000/api"
-  //api_url: "https://online-banking-pro.herokuapp.com/api" //production
+  //api_url: "http://localhost:3000/api"
+  api_url: "https://online-banking-pro.herokuapp.com/api" //production
 };
 
 /*

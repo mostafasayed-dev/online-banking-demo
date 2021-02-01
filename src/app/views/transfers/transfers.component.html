@@ -161,8 +161,9 @@
                 </div>
             </div>
         </div> -->
+        
         <!-- amount -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <div class="row">
                 <div class="col-md-3">
                     <label for="transfer_amount">From Amount</label>
@@ -196,7 +197,18 @@
 
                 </div>
             </div>
+        </div> -->
+        
+        <div class="row">
+            <div class="col-md-6">
+                <money-rate
+                    [fromCurrencyChanged]="fromCurrencyChangedSubject.asObservable()"
+                    [toCurrencyChanged]="toCurrencyChangedSubject.asObservable()"
+                    (fromAmountChanged) = "setAmount($event)"
+                    (toAmountChanged) = "setToAmount($event)"></money-rate>
+            </div>
         </div>
+        
         <!-- description -->
         <div class="form-group">
             <div class="row">
@@ -220,7 +232,7 @@
         <div class="row">
             <div class="col-md-10">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 btn-transfer-container">
                 <button class="btn btn-default btn-transfer btn-block" 
                         type="submit"
                         (click)="showInfoMessage(infoMessageTemplate)"

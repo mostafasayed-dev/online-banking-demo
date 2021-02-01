@@ -15,9 +15,9 @@ import { Router } from '@angular/router';
 })
 export class TransfersComponent implements OnInit {
 
-  currencyChangedSubject: Subject<string> = new Subject<string>();
+  // currencyChangedSubject: Subject<string> = new Subject<string>();
 
-  currencyToChangedSubject: Subject<string> = new Subject<string>();
+  // currencyToChangedSubject: Subject<string> = new Subject<string>();
   amountToChangedSubject: Subject<Number> = new Subject<Number>();
 
   toCurrencyChangedSubject: Subject<string> = new Subject<string>();
@@ -112,7 +112,7 @@ export class TransfersComponent implements OnInit {
           }
         }
         //notify app-money-field with account currency
-        this.currencyChangedSubject.next(this.from_account_currency);// to notify app-money-field that currency has been changed
+        //this.currencyChangedSubject.next(this.from_account_currency);// to notify app-money-field that currency has been changed
         this.fromCurrencyChangedSubject.next(this.from_account_currency)
       }
     }else{
@@ -139,7 +139,7 @@ export class TransfersComponent implements OnInit {
           this.to_account_selected = true
         }
         //notify app-money-field with account currency
-        this.currencyToChangedSubject.next(this.to_account_currency);// to notify app-money-field that currency has been changed
+        //this.currencyToChangedSubject.next(this.to_account_currency);// to notify app-money-field that currency has been changed
 
         this.toCurrencyChangedSubject.next(this.to_account_currency);
       }
@@ -157,7 +157,7 @@ export class TransfersComponent implements OnInit {
     this.from_account_acctual_balance = null
     this.from_account_available_balance = null
     this.from_account_currency = ""
-    this.currencyChangedSubject.next("");
+    //this.currencyChangedSubject.next("");
     this.fromCurrencyChangedSubject.next("");
     this.transfer_amount_value = 0;
     this.from_account_selected = false
@@ -168,7 +168,7 @@ export class TransfersComponent implements OnInit {
     this.to_account_acctual_balance = null
     this.to_account_available_balance = null
     this.to_account_currency = ""
-    this.currencyToChangedSubject.next("");
+    //this.currencyToChangedSubject.next("");
     this.toCurrencyChangedSubject.next("");
     this.to_account_selected = false
   }
