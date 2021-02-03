@@ -5,15 +5,25 @@
             id="from_amount"
             name="from_amount"
             type="text"
-            [(ngModel)]="fromFullText"
-            (focus)="onFocus_FromText(this)"
-            (ngModelChange) = "onTextChanged_FromText($event)"
-            (blur)="onBlur_FromText(this)"
+            (focus)="onFromAmountFocus(this)"
+            (ngModelChange) = "onFromAmountTextChanged($event)"
+            (blur)="onFromAmountBlur(this)"
             class="form-control form-control-sm"
-            autocomplete="off">
+            autocomplete="off"
+            [(ngModel)]="fromFullText"
+            #from_amount="ngModel" 
+            [ngClass]="(from_amount?.touched && fromFullText == '')? 'is-invalid' : 
+                        (from_amount?.touched && fromFullText != '') ? 'is-valid' : ''"
+            [placeholder]="fromPlaceholder"
+            required>
+            <div class="invalid-feedback">
+                Please enter Amount.
+            </div>
     </div>
     <div class="flex-item-right">
-        <label for="to_amount">To Amount</label>
+        <label for="to_amount">To Amount 
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isLoading == true"></span>
+        </label>
             <input
             id="to_amount"
             name="to_amount"
@@ -21,6 +31,7 @@
             class="form-control form-control-sm"
             [value]="toFullText"
             [disabled]="true"
+            placeholder="0.00"
             autocomplete="off">
     </div>
 </div>

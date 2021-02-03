@@ -65,14 +65,14 @@ span.hint {
 
 
 @media only screen and (max-width: 767px){
-    #description{
+    /* #description{
         margin-right: 30px;
-    }
+    } */
 
-    .btn-block {
-        /* width: 45%; */
+    /* .btn-block {
+        width: 45%;
         margin-right: 30px;
-    }
+    } */
 
     .btn-transfer-container{
         display: flex;

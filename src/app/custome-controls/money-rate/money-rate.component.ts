@@ -1,21 +1,30 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { RatesService } from 'src/app/services/rate.service';
 
 @Component({
   selector: 'money-rate',
   templateUrl: './money-rate.component.html',
-  styleUrls: ['./money-rate.component.css']
+  styleUrls: ['./money-rate.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MoneyRateComponent),
+      multi: true
+    }
+  ]
 })
-export class MoneyRateComponent implements OnInit, OnDestroy {
+export class MoneyRateComponent implements OnInit, OnDestroy, ControlValueAccessor  {
 
   private fromCurrencyChangedSubscription: Subscription;
   private toCurrencyChangedSubscription: Subscription;
   private fromCurrency: string = "";
   private toCurrency: string = "";
-  fromFullText: string = "0.00";
-  toFullText: string = "0.00";
-  private tempFromFullText: string;
+  fromFullText: string = "";
+  toFullText: string = "";
+  fromPlaceholder = "0.00";
+  isLoading = false;
 
   // @Input('from-currency') fromCurrency = ""
   // @Input('to-currency') toCurrency = ""
@@ -31,133 +40,136 @@ export class MoneyRateComponent implements OnInit, OnDestroy {
     this.fromCurrencyChangedSubscription = this.fromCurrencyChangedObservable.subscribe(
       currency => {
         this.fromCurrency = currency;
-        this.setFromFullText(this.fromCurrency);
-        this.calculateRates();
-        //console.log('fromCurrency',this.fromCurrency);
+        this.setFromCurrency(currency);
+        this.calculateRate();
       }
     )
 
     this.toCurrencyChangedSubscription = this.toCurrencyChangedObservable.subscribe(
       currency => {
         this.toCurrency = currency;
-        this.setToFullText_Currency(this.toCurrency);
-        this.calculateRates();
-        //console.log('toCurrency',this.toCurrency);
+        this.setToCurrency(currency);
+        this.calculateRate();
       }
     )
   }
 
-  setFromFullText(currency){
-    const amountCurrencyParts = this.fromFullText.split(" ");
-    if(amountCurrencyParts.length >= 1){// only amount part
-      this.fromFullText = amountCurrencyParts[0] + " " + currency;
+  setFromCurrency(currency: string){
+    if(this.fromFullText != "" && currency.trim() != ""){
+      if(this.fromFullText.split(" ").length == 2){
+        this.fromFullText = this.fromFullText.split(" ")[0].trim() + " " + currency.trim() ;
+      }
     }
-  }
-
-  getFromFullText_Amount(){
-    const amountCurrencyParts = this.fromFullText.split(" ");
-    if(amountCurrencyParts.length == 2){// only amount part
-      return parseFloat(amountCurrencyParts[0]).toFixed(2);
-    }
-    return parseFloat("0").toFixed(2);
-  }
-
-  setToFullText_Currency(currency){
-    const amountCurrencyParts = this.toFullText.split(" ");
-    if(amountCurrencyParts.length >= 1){// to get amount part
-      this.toFullText = amountCurrencyParts[0] + " " + currency;
-    }
-  }
-
-  setToFullText_Amount(amount){
-    const amountCurrencyParts = this.toFullText.split(" ");
-    if(amountCurrencyParts.length >= 1){// to get amount part
-      this.toFullText = amount + " " + amountCurrencyParts[1];
-    }
-  }
-
-  onFocus_FromText(value){
-    const amountCurrencyParts = this.toFullText.split(" ");
-    if(amountCurrencyParts.length >= 1){// to get amount part
-      this.tempFromFullText = this.fromFullText;
+    else{
       this.fromFullText = "";
     }
   }
 
-  onTextChanged_FromText(value){
-    // apply regular expression to delete characters if exists and allow only one decimal point
-    this.fromFullText = this.fromFullText.replace(/[^0-9.]|\.(?=.*\.)/g,"")
-  }
-
-  onBlur_FromText(value){
-    const amountCurrencyParts = this.tempFromFullText.split(" ");
-    if(amountCurrencyParts.length == 2){// to get currency part
-      if(this.fromFullText == ""){// amount does not changed
-        this.fromFullText  = amountCurrencyParts[0]+ " " + amountCurrencyParts[1];
-      }else{// amount changed
-        if(this.fromFullText.includes(".")){
-          if(this.fromFullText.endsWith(".")){
-            this.fromFullText = this.fromFullText + "00"
-          }
-        }
-        else{
-          this.fromFullText = this.fromFullText + ".00"
-        }
-        this.fromAmountChangedEvent.emit(parseFloat(this.fromFullText).toFixed(2));
-        this.fromFullText  = this.fromFullText + " " + amountCurrencyParts[1];
-        this.calculateRates();
-      }
-    }
-    else{ // there is no currency => 0.00
-      this.fromFullText = "0.00";
-    }
-  }
-
-  calculateRates(){
-    if(this.toCurrency && this.toCurrency != ""){
-      if(this.fromCurrency == this.toCurrency){
-        let newToAmount = this.getFromFullText_Amount() as any;
-        this.setToFullText_Amount(newToAmount);
-        this.toAmountChangedEvent.emit(newToAmount.toFixed(2))
+  setToCurrency(currency: string){
+    if(currency.trim() != ""){
+      if(this.toFullText.split(" ")[0].trim() == ""){
+        this.toFullText =  "0.00 " + currency.trim();
       }
       else{
-        this.ratesService.getRate(this.fromCurrency).subscribe(
-          rate => {
-            // console.log(rate);
-            let buyRate = rate.buy_rate;
-            let sellRate = rate.sell_rate;
-            let isBaseCurrency = rate.is_base_currency;
-            if(isBaseCurrency){
-              // from currency is base currency => from local to foreign
-              this.ratesService.getRate(this.toCurrency).subscribe(
-                rate => {
-                  buyRate = rate.buy_rate;
-                  sellRate = rate.sell_rate;
-                  isBaseCurrency = rate.is_base_currency;
-
-                  let newToAmount = this.getFromFullText_Amount() as any/ sellRate;
-                  this.setToFullText_Amount(newToAmount.toFixed(2));
-                  this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
-                }
-              )
-            }else{
-              // from currency is not a base currency => from foreign to local
-              this.ratesService.getRate(this.fromCurrency).subscribe(
-                rate => {
-                  buyRate = rate.buy_rate;
-                  sellRate = rate.sell_rate;
-                  isBaseCurrency = rate.is_base_currency;
-
-                  let newToAmount = this.getFromFullText_Amount() as any * buyRate;
-                  this.setToFullText_Amount(newToAmount.toFixed(2));
-                  this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
-                }
-              )
-            }
-          }
-        )
+        this.toFullText = this.toFullText.split(" ")[0].trim() + " " + currency.trim();
       }
     }
+    else{
+      this.toFullText = "";
+    }
+  }
+
+  onFromAmountFocus(value){
+    if(this.fromFullText != ""){
+      if(this.fromFullText.split(" ").length == 2){
+        this.fromFullText = this.fromFullText.split(" ")[0].trim();// reset to amount
+      }
+    }
+  }
+
+  onFromAmountTextChanged(value){
+    if(value == ""){
+      this.toFullText = "0.00 " + this.toCurrency;
+    }
+  }
+
+  onFromAmountBlur(value){
+    // apply regular expression to delete characters if exists and allow only one decimal point
+    this.fromFullText = this.fromFullText.replace(/[^0-9.]|\.(?=.*\.)/g,"").trim();
+    if(this.fromFullText != "" && this.fromCurrency){// amount entered and currency selected
+      this.fromAmountChangedEvent.emit(parseFloat(this.fromFullText).toFixed(2));
+      this.fromFullText = this.fromFullText + " " + this.fromCurrency; // on blur show currency part
+      this.calculateRate();
+    }
+    else{
+      this.fromFullText = "";
+    }
+  }
+
+  calculateRate(){
+    this.isLoading = true;
+    if(this.fromCurrency && this.fromCurrency != ""
+      && this.toCurrency && this.toCurrency != ""
+      && this.fromFullText && this.fromFullText != ""
+      && this.toFullText && this.toFullText != ""){
+        const fromAmount = this.fromFullText.split(" ")[0];
+        const toCurrency = this.toFullText.split(" ")[1];
+        if(this.fromCurrency == this.toCurrency){
+          this.toFullText = parseFloat(fromAmount).toFixed(2) + " " + toCurrency;
+        }
+        else{
+          this.ratesService.getRate(this.fromCurrency).subscribe(
+            rate => {
+              // console.log(rate);
+              let buyRate = rate.buy_rate;
+              let sellRate = rate.sell_rate;
+              let isBaseCurrency = rate.is_base_currency;
+              if(isBaseCurrency){
+                // from currency is base currency => from local to foreign
+                this.ratesService.getRate(this.toCurrency).subscribe(
+                  rate => {
+                    buyRate = rate.buy_rate;
+                    sellRate = rate.sell_rate;
+                    isBaseCurrency = rate.is_base_currency;
+                    
+                    let newToAmount = fromAmount as any/ sellRate;
+                    this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
+                    this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
+                  }
+                )
+              }else{
+                // from currency is not a base currency => from foreign to local
+                this.ratesService.getRate(this.fromCurrency).subscribe(
+                  rate => {
+                    buyRate = rate.buy_rate;
+                    sellRate = rate.sell_rate;
+                    isBaseCurrency = rate.is_base_currency;
+  
+                    let newToAmount = fromAmount as any * buyRate;
+                    this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
+                    this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
+                  }
+                )
+              }
+            }
+          )
+        }
+      }
+      this.isLoading = false;
+  }
+
+  onChange: any = () => {}
+  onTouch: any = () => {}
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  input: string;
+  writeValue(input: string) {
+    this.input = input;
   }
 
   ngOnDestroy() {

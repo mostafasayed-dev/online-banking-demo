@@ -40,9 +40,9 @@ export class TransfersComponent implements OnInit {
   to_account_available_balance : number;
   to_account_selected = false;
 
-  selected_transfer_type_value = -1;
-  selected_from_account_no_value = "-1";
-  selected_to_account_no_value = "-1";
+  selected_transfer_type_value = "";
+  selected_from_account_no_value = "";
+  selected_to_account_no_value = "";
   description_value = "";
   transfer_amount_value : number;
   transfer_amount_to_value : number;
@@ -174,28 +174,34 @@ export class TransfersComponent implements OnInit {
   }
 
   setAmount(amount){
+    // console.log("from amount", amount)
     this.transfer_amount_value = amount
     this.amountToChangedSubject.next(this.transfer_amount_value)
     //console.log(this.transfer_amount)
   }
 
   setToAmount(amount) {
+    // console.log("to amount", amount)
     this.transfer_amount_to_value = amount
   }
 
-  transfer(form: NgForm){
-    //console.log(form)
-    if(form.value.transfer_type == -1 || 
-      form.value.from_account == "-1" || form.value.to_account == "-1" ||
-      this.transfer_amount_value == 0){
-      return
+  transfer(form: NgForm, infoMessageTemplate: TemplateRef<any>){
+    // console.log(form)
+    // console.log("transfer_amount_value", this.transfer_amount_value)
+    if(form.invalid 
+        || this.transfer_amount_value == 0 || this.transfer_amount_value == undefined
+        || this.transfer_amount_to_value == 0 || this.transfer_amount_to_value == undefined){
+      return;
+    }
+    else{
+      this.showInfoMessage(infoMessageTemplate);
     }
   }
 
   transferConfirmed(confirmed: boolean, successMessageTemplate: TemplateRef<any>){
     // console.log(confirmed)
     if(confirmed){
-      this.transferService.createTransfer(this.selected_transfer_type_value, 
+      this.transferService.createTransfer(parseInt(this.selected_transfer_type_value), 
                                           this.selected_from_account_no_value.split('-')[0].trim(), 
                                           this.selected_to_account_no_value.split('-')[0].trim(),
                                           this.description_value,
