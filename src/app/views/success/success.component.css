@@ -1,4 +1,5 @@
 .center {
+    margin-top: 75px;
     display: flex;
     align-items: center;
     flex-direction: column; 
@@ -12,6 +13,14 @@ i {
     animation: fadeIn 1s ease-in both;
 }
 
+button.home {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    width: 30%;
+}
+
 .check {
     color: #198754;
 }
@@ -21,8 +30,14 @@ i {
 }
 
 @media only screen and (max-width: 465px){
+    .center {
+        margin-top: 85px;
+    }
     h1{
         font-size: 30px;
+    }
+    i {
+        font-size: 100px;
     }
 }
 

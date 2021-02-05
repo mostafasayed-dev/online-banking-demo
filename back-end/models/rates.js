@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const rimSchema = mongoose.Schema({
+const rateSchema = mongoose.Schema({
     currency: {
         type: String,
         required: true,
@@ -22,5 +22,19 @@ const rimSchema = mongoose.Schema({
     timestamps: true /* createdAt & updatedAt columns*/
 })
 
-const Rates = mongoose.model('Rates', rimSchema)
+rateSchema.statics.isValidCurrencyForTransfers = async (fromCurrency, toCurrency) => {
+    const from = await Rates.findOne({currency: fromCurrency})
+    const to  = await Rates.findOne({currency: toCurrency})
+    if(from && to){
+        if(from.is_base_currency || to.is_base_currency){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    return true;
+}
+
+const Rates = mongoose.model('Rates', rateSchema)
 module.exports = Rates

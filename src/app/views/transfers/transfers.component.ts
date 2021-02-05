@@ -53,6 +53,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
   info_message_button_text = "Continue";
   transfer_succeeded = true;
   transfer_error_message = "";
+  isValidDataForTransfer = false;
 
   constructor(private authService: AuthService, 
               private accountService: AccountService,
@@ -196,6 +197,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
     }
     else{
       this.showInfoMessage(infoMessageTemplate);
+      //this.isValidDataForTransfer = true;
     }
   }
 

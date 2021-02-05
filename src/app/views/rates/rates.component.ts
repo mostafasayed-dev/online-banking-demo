@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { MediaQueryService } from 'src/app/services/media-query.service';
 import { RatesService } from 'src/app/services/rate.service';
 import { Rate } from "../../models/rate.model";
 
@@ -13,8 +15,11 @@ export class RatesComponent implements OnInit, OnDestroy {
   intervalId = null;
   ratesList: Rate[];
   displayedColumns: string[] = ['currency', 'buyRate', 'sellRate', 'lastUpdated'];
+  deviceWidthListener: Subscription;
+  deviceWidth : number;
 
-  constructor(public ratesService: RatesService) { }
+  constructor(public ratesService: RatesService,
+              public mediaQueryService: MediaQueryService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -24,6 +29,13 @@ export class RatesComponent implements OnInit, OnDestroy {
       }
       , 5000);
     // this.getRates();
+
+    this.deviceWidth = this.mediaQueryService.getDeviceWidth();
+    this.deviceWidthListener = this.mediaQueryService.getDeviceWidthListener().subscribe(
+      width => {
+        this.deviceWidth = width;
+      }
+    )
   }
 
   async getRates(){

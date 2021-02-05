@@ -5,4 +5,8 @@
                   (isValidReferenceNumber && referenceNumber != '') ? 'bi bi-check-circle check' : ''"></i>
     <h4 *ngIf="isValidReferenceNumber">Reference Number</h4>
     <h4 *ngIf="isValidReferenceNumber">{{referenceNumber}}</h4>
+    <button *ngIf="(isValidReferenceNumber && referenceNumber != '') || !isValidReferenceNumber && referenceNumber == ''"
+        class="btn btn-default home" 
+        routerLink="accounts"
+        >Home</button>
 </div>

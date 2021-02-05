@@ -27,6 +27,7 @@ import { MoneyRateComponent } from './custome-controls/money-rate/money-rate.com
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { AboutUsComponent } from './views/about-us/about-us.component';
 import { RatesComponent } from './views/rates/rates.component';
+import { TransferDetailsComponent } from './views/transfer-details/transfer-details.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { RatesComponent } from './views/rates/rates.component';
     MoneyRateComponent,
     AboutUsComponent,
     RatesComponent,
+    TransferDetailsComponent,
   ],
   imports: [
     BrowserModule,

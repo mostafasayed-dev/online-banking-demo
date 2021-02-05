@@ -4,6 +4,7 @@
         <strong>Transfer Failed! </strong>—{{transfer_error_message}}
     </div>
     <form (submit)="transfer(transferForm, infoMessageTemplate)" #transferForm="ngForm"
+        
         [ngClass]="transferForm.submitted ? 'was-validated' : 'needs-validation'" novalidate>
         <!-- transfer type -->
         <div class="form-group">
