@@ -9,7 +9,7 @@ import { TransfersComponent } from './views/transfers/transfers.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SpinnerXComponent } from './custome-controls/spinner-x/spinner-x.component';
 import { PageHeaderComponent } from './custome-controls/page-header/page-header.component';
@@ -24,6 +24,9 @@ import { SuccessComponent } from './views/success/success.component';
 import { HistoryComponent } from './views/history/history.component';
 import { PaginationComponent } from './custome-controls/pagination/pagination.component';
 import { MoneyRateComponent } from './custome-controls/money-rate/money-rate.component';
+import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { AboutUsComponent } from './views/about-us/about-us.component';
+import { RatesComponent } from './views/rates/rates.component';
 
 
 @NgModule({
@@ -44,6 +47,8 @@ import { MoneyRateComponent } from './custome-controls/money-rate/money-rate.com
     HistoryComponent,
     PaginationComponent,
     MoneyRateComponent,
+    AboutUsComponent,
+    RatesComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +59,9 @@ import { MoneyRateComponent } from './custome-controls/money-rate/money-rate.com
     AngularMaterialModule,
     NgxBootstrapModule,
   ],
-  providers: [ModalSuccessComponent, ModalInfoComponent],
+  providers: [ModalSuccessComponent, 
+              ModalInfoComponent,
+              {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

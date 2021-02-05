@@ -1,0 +1,17 @@
+table{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+p{
+    margin-bottom: 100px;
+}
+
+@media only screen and (max-width: 465px){
+    h4{
+        font-size: large;
+    }
+    p{
+        font-size: small;
+    }
+}

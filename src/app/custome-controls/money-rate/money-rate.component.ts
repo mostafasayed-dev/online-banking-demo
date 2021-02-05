@@ -116,6 +116,7 @@ export class MoneyRateComponent implements OnInit, OnDestroy, ControlValueAccess
         const toCurrency = this.toFullText.split(" ")[1];
         if(this.fromCurrency == this.toCurrency){
           this.toFullText = parseFloat(fromAmount).toFixed(2) + " " + toCurrency;
+          this.toAmountChangedEvent.emit(parseFloat(fromAmount).toFixed(2));
         }
         else{
           this.ratesService.getRate(this.fromCurrency).subscribe(

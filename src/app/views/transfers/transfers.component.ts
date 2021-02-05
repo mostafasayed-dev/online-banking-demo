@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,12 +8,13 @@ import { ModalSuccessComponent } from 'src/app/custome-controls/modal-success/mo
 import { ModalInfoComponent } from 'src/app/custome-controls/modal-info/modal-info.component';
 import { Account } from '../../models/account.model'
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-transfers',
   templateUrl: './transfers.component.html',
   styleUrls: ['./transfers.component.css']
 })
-export class TransfersComponent implements OnInit {
+export class TransfersComponent implements OnInit, OnDestroy {
 
   // currencyChangedSubject: Subject<string> = new Subject<string>();
 
@@ -30,14 +31,14 @@ export class TransfersComponent implements OnInit {
   from_account_type = "";
   from_account_currency = "";
   from_account_acctual_balance : number;
-  from_account_available_balance : number;
+  from_account_available_balance : string;
   from_account_selected = false;
 
   to_account_no = "";
   to_account_type = "";
   to_account_currency = "";
   to_account_acctual_balance : number;
-  to_account_available_balance : number;
+  to_account_available_balance : string;
   to_account_selected = false;
 
   selected_transfer_type_value = "";
@@ -99,8 +100,8 @@ export class TransfersComponent implements OnInit {
         if(account.length === 1){
           this.from_account_type = account[0].account_type
           this.from_account_acctual_balance = account[0].actual_balance
-          this.from_account_available_balance = account[0].available_balance
-          if(this.from_account_available_balance <= 0){
+          this.from_account_available_balance = parseFloat(account[0].available_balance.toString()).toFixed(2)
+          if(parseFloat(this.from_account_available_balance) <= 0){
             this.from_account_selected = false
             //this.openModal(template)
             //this.showModal()
@@ -135,7 +136,7 @@ export class TransfersComponent implements OnInit {
         if(account.length === 1){
           this.to_account_type = account[0].account_type
           this.to_account_acctual_balance = account[0].actual_balance
-          this.to_account_available_balance = account[0].available_balance
+          this.to_account_available_balance = parseFloat(account[0].available_balance.toString()).toFixed(2)
           this.to_account_selected = true
         }
         //notify app-money-field with account currency
@@ -243,5 +244,8 @@ export class TransfersComponent implements OnInit {
     this.data2.push(new Date().toISOString())
     //console.log(this.data2)
     this.modalInfo.openModal(template)
+  }
+
+  ngOnDestroy(): void {
   }
 }

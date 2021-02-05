@@ -63,6 +63,12 @@ span.hint {
 	animation-delay: 1s;
 }
 
+.bg-success-custome {
+    margin-top: 10px;
+    background-color: #198754;
+    font-weight: lighter;
+}
+
 
 @media only screen and (max-width: 767px){
     /* #description{

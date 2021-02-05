@@ -1,0 +1,51 @@
+<div class="container">
+    <app-page-header [header_text]="'Live Rates'"></app-page-header>
+
+    <table id="rates" mat-table [dataSource]="ratesList" class="mat-elevation-z8"
+        *ngIf="this.ratesService.ratesList?.length > 0 && !isLoading">
+        <!-- Currency -->
+        <ng-container matColumnDef="currency">
+            <th mat-header-cell *matHeaderCellDef> Cur. </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.currency}}</td>
+        </ng-container>
+
+        <!-- Buy Rate -->
+        <ng-container matColumnDef="buyRate">
+            <th mat-header-cell *matHeaderCellDef>
+                Buy Rate
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.buy_rate}}</td>
+        </ng-container>
+
+        <!-- Sell Rate -->
+        <ng-container matColumnDef="sellRate">
+            <th mat-header-cell *matHeaderCellDef>
+                Sell Rate
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.sell_rate}}</td>
+        </ng-container>
+
+        <!-- Last Update-->
+        <ng-container matColumnDef="lastUpdated">
+            <th mat-header-cell *matHeaderCellDef>
+                Last Update
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.updatedAt | date:'dd/MM/yyyy hh:mm:ss'}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div class="row" *ngIf="!isLoading">
+        <h4>Note:</h4>
+        <P>If any update in rates, Rates will be changed in real time without need to refresh web page.</P>
+    </div>
+</div>
+<app-spinner-x *ngIf="isLoading"></app-spinner-x>

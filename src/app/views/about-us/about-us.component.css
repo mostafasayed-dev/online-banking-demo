@@ -1,0 +1,58 @@
+.about-header h1{
+    color: #19547b;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.about-services h3{
+    font-weight: lighter;
+}
+
+.about-slogan p{
+    text-align: center;
+    font-size: x-large;
+    color: #19547b;
+}
+
+i.about-icon {
+    font-size: 75px;
+    color: #19547b;
+}
+
+.about-services div:nth-child(1){
+    animation: fadeIn 0.5s ease-in both;
+}
+
+.about-services div:nth-child(2){
+    animation: fadeIn 1s ease-in both;
+}
+
+.about-services div:nth-child(3){
+    animation: fadeIn 1.5s ease-in both;
+}
+
+div.about-services {
+    margin-bottom: 50px;
+}
+
+@media only screen and (max-width: 465px){
+    .about-header h1{
+        font-size: xx-large;
+    }
+
+    .about-slogan p{
+        font-size: large;
+    }
+
+    i.about-icon {
+        font-size: 50px;
+    }
+
+    .about-services h3{
+        font-size: x-large;
+    }
+
+    .about-services p{
+        font-size: 15px;
+    }
+}

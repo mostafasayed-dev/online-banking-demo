@@ -2,10 +2,11 @@ const express = require('express')
 const Transfer = require('../models/transfer')
 const Account = require('../models/account')
 const History = require('../models/history')
+const auth = require('../middleware/auth')
 
 const router = express.Router()
 
-router.post("", async (req, res) => {
+router.post("", auth, async (req, res) => {
     
     const transfer = new Transfer({
         ...req.body

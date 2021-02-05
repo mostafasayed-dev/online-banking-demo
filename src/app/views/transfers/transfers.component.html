@@ -29,7 +29,11 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="from_account">From Account</label>
+                    <div class="d-flex justify-content-between">
+                        <label for="to_account">From Account</label>
+                        <span class="badge bg-success-custome" *ngIf="from_account_selected">
+                            {{from_account_available_balance}} {{from_account_currency}}</span>
+                    </div>
                     <select class="form-select form-control-sm" id="from_account" name="from_account"
                         (change)="getAccountFromData($event)" [(ngModel)]="selected_from_account_no_value" [ngClass]="(transferForm.controls.from_account?.touched 
                                     && transferForm.value.from_account == '')? 'is-invalid' : 
@@ -46,7 +50,11 @@
                 </div>
                 <!-- to account -->
                 <div class="col-md-6">
-                    <label for="to_account">To Account</label>
+                    <div class="d-flex justify-content-between">
+                        <label for="to_account">To Account</label>
+                        <span class="badge bg-success-custome" *ngIf="to_account_selected">
+                            {{to_account_available_balance}} {{to_account_currency}}</span>
+                    </div>
                     <select class="form-select form-control-sm" id="to_account" name="to_account"
                         (change)="getAccountToData($event)" [(ngModel)]="selected_to_account_no_value" [ngClass]="(transferForm.controls.to_account?.touched 
                                     && transferForm.value.to_account == '')? 'is-invalid' : 

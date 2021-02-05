@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../middleware/auth')
 const Rim = require('../models/rim')
 
 const router = express.Router()
@@ -17,7 +18,7 @@ router.post("", async (req, res) => {
 })
 
 // get rim by rim_no
-router.get("/:rim_no", async (req, res) => {
+router.get("/:rim_no", auth, async (req, res) => {
     try{
         const rim = await Rim.findOne({rim_no: req.params.rim_no})
         if(rim){

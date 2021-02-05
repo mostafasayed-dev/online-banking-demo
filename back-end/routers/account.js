@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../middleware/auth')
 const Account = require('../models/account')
 
 const router = express.Router()
@@ -16,7 +17,7 @@ router.post("", async (req, res) => {
     }
 })
 
-router.get("/:rim_no", async (req, res) => {
+router.get("/:rim_no", auth, async (req, res) => {
     try{
         const pageSize = +req.query.pagesize;
         const currentPage = +req.query.page;

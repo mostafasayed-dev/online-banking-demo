@@ -1,13 +1,13 @@
-<div class="form-wrapper">
+<!-- <div class="form-wrapper">
     <div class="form-content">
         <h3>Please Login</h3>
         <div class="alert alert-danger" role="alert" *ngIf="!loginStatus">
             Invalid Username or Password
         </div>
         <form (submit) = "onLogin(loginForm)" #loginForm="ngForm">
-            <div class="mb-3">
-                <!-- <label for="username">Username</label> -->
-                <input 
+            <div class="mb-3"> -->
+<!-- <label for="username">Username</label> -->
+<!-- <input 
                     type="text" 
                     id="username"
                     name="username" 
@@ -23,9 +23,9 @@
                     autocomplete="off"
                     required>
             </div>
-            <div class="mb-3">
-                <!-- <label for="password">Password</label> -->
-                <input 
+            <div class="mb-3"> -->
+<!-- <label for="password">Password</label> -->
+<!-- <input 
                     type="password" 
                     id="password" 
                     name="password"
@@ -45,4 +45,65 @@
             </button>
         </form>
     </div>
+</div> -->
+
+<div class="container">
+    <form (submit)="onLogin(loginForm)" #loginForm="ngForm"
+        [ngClass]="loginForm.submitted ? 'was-validated' : 'needs-validation'" novalidate>
+        <h1>Please Login</h1>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username"
+                        name="username" 
+                        placeholder="Username"
+                        class="form-control"
+                        #username="ngModel"  
+                        ngModel
+                        autocomplete="off"
+                        required>
+                    <div class="invalid-feedback">
+                        Please enter Username.
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password"
+                        placeholder="Password"
+                        class="form-control" 
+                        #password="ngModel"  
+                        ngModel 
+                        required>
+                    <div class="invalid-feedback">
+                        Please enter Password.
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+
+        <div class="row center">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-login" [disabled]="isLoading">Login
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isLoading"></span>
+                </button>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </form>
 </div>

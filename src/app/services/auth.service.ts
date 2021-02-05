@@ -34,6 +34,10 @@ export class AuthService{
         return this.rim_number
     }
 
+    getToken(){
+        return this.token;
+    }
+
     login(username: string, password: string){
         console.log('api_url', api_url);
         console.log('environment', environment.production);

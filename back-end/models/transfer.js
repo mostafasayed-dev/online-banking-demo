@@ -43,7 +43,7 @@ const transferSchema = mongoose.Schema({
 transferSchema.pre('save', function(next){
     const transfer = this;
     transfer.ref_number = generateReferenceNumber();
-    console.log(transfer.ref_number)
+    // console.log(transfer.ref_number)
     next();
 })
 

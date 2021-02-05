@@ -1,9 +1,10 @@
 const express = require('express');
+const auth = require('../middleware/auth');
 const History = require('../models/history');
 
 const router = express.Router();
 
-router.get('', async (req, res) => {
+router.get('', auth, async (req, res) => {
     try{
         const pageSize = +req.query.pagesize;
         const currentPage = +req.query.page;
@@ -24,7 +25,7 @@ router.get('', async (req, res) => {
     }
 })
 
-router.get('/:account_no', async (req, res) => {
+router.get('/:account_no', auth, async (req, res) => {
     try{
         const pageSize = +req.query.pagesize;
         const currentPage = +req.query.page;
@@ -55,7 +56,7 @@ router.get('/:account_no', async (req, res) => {
     }
 })
 
-router.get('/reference/:referenceNumber', async(req, res) => {
+router.get('/reference/:referenceNumber', auth, async(req, res) => {
     try{
         const history = await History.findOne({reference_number: req.params.referenceNumber})
         if(history){
