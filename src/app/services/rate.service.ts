@@ -37,4 +37,11 @@ export class RatesService{
                     }
                 );
     }
+
+    getForeignToforeignRate(fromForeignCurrency, toForeignCurrency, amount){
+        return this.http.get<any>(api_url+"/foreigntoforeign", 
+                            {params: {from_foreign_currency: fromForeignCurrency, 
+                                      to_foreign_currency: toForeignCurrency, 
+                                      amount}});
+    }
 }

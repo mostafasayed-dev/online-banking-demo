@@ -63,11 +63,15 @@ span.hint {
 	animation-delay: 1s;
 }
 
-.bg-success-custome {
+.bg-success-custome, .bg-danger-custome {
     margin-top: 10px;
-    background-color: #198754;
     font-weight: lighter;
+    transition: background-color 0.5s;
 }
+
+.bg-success-custome { background-color: #198754; }
+
+.bg-danger-custome { background-color: #dc3545; }
 
 
 @media only screen and (max-width: 767px){

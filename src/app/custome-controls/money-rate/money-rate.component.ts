@@ -96,12 +96,13 @@ export class MoneyRateComponent implements OnInit, OnDestroy, ControlValueAccess
   onFromAmountBlur(value){
     // apply regular expression to delete characters if exists and allow only one decimal point
     this.fromFullText = this.fromFullText.replace(/[^0-9.]|\.(?=.*\.)/g,"").trim();
-    if(this.fromFullText != "" && this.fromCurrency){// amount entered and currency selected
+    if(this.fromFullText != "" && parseInt(this.fromFullText) != 0 && this.fromCurrency){// amount entered and currency selected
       this.fromAmountChangedEvent.emit(parseFloat(this.fromFullText).toFixed(2));
       this.fromFullText = this.fromFullText + " " + this.fromCurrency; // on blur show currency part
       this.calculateRate();
     }
     else{
+      this.fromAmountChangedEvent.emit(0);
       this.fromFullText = "";
     }
   }
@@ -121,39 +122,45 @@ export class MoneyRateComponent implements OnInit, OnDestroy, ControlValueAccess
         else{
           this.ratesService.getRate(this.fromCurrency).subscribe(
             rate => {
-              // console.log(rate);
-              let buyRate = rate.buy_rate;
-              let sellRate = rate.sell_rate;
-              let isBaseCurrency = rate.is_base_currency;
-              if(isBaseCurrency){
+              let fromBuyRate = rate.buy_rate;
+              let isBaseFromCurrency = rate.is_base_currency;
+
+              if(isBaseFromCurrency){
                 // from currency is base currency => from local to foreign/local
                 this.ratesService.getRate(this.toCurrency).subscribe(
                   rate => {
-                    buyRate = rate.buy_rate;
-                    sellRate = rate.sell_rate;
-                    isBaseCurrency = rate.is_base_currency;
-                    
-                    let newToAmount = fromAmount as any/ sellRate;
+                    let toSellRate = rate.sell_rate;
+                    // local => foreign
+                    let newToAmount = fromAmount as any/ toSellRate;
                     this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
                     this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
                   }
                 )
-              }else{
-                // from currency is not a base currency => from foreign to local/foreign
-                let newToAmount = fromAmount as any * buyRate;
-                this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
-                this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
-                // this.ratesService.getRate(this.fromCurrency).subscribe(
-                //   rate => {
-                //     buyRate = rate.buy_rate;
-                //     sellRate = rate.sell_rate;
-                //     isBaseCurrency = rate.is_base_currency;
-  
-                //     let newToAmount = fromAmount as any * buyRate;
-                //     this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
-                //     this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
-                //   }
-                // )
+              }
+              else{
+                // from currency is (foreign currency) not a base currency => from foreign to local/foreign
+                this.ratesService.getRate(this.toCurrency).subscribe(
+                  rate => {
+                    let isBaseToCurrency = rate.is_base_currency;
+                    if(isBaseToCurrency)// to local
+                    {
+                      // foreign => local
+                      let newToAmount = fromAmount as any * fromBuyRate;
+                      this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
+                      this.toAmountChangedEvent.emit(newToAmount.toFixed(2));
+                    }
+                    else{// to foreign
+                      // foreign => foreign
+                      this.ratesService.getForeignToforeignRate(this.fromCurrency, this.toCurrency, parseFloat(fromAmount).toFixed(2)).subscribe(
+                        response => {
+                          let newToAmount = parseFloat(response.converted_amount.toString()).toFixed(2);
+                          this.toFullText = parseFloat(newToAmount.toString()).toFixed(2) + " " + toCurrency;
+                          this.toAmountChangedEvent.emit(newToAmount);
+                        }
+                      )
+                    }
+                  }
+                )
               }
             }
           )

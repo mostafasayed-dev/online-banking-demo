@@ -8,6 +8,8 @@ import { ModalSuccessComponent } from 'src/app/custome-controls/modal-success/mo
 import { ModalInfoComponent } from 'src/app/custome-controls/modal-info/modal-info.component';
 import { Account } from '../../models/account.model'
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { DialogInfoComponent } from 'src/app/custome-controls/dialog-info/dialog-info.component';
 
 @Component({
   selector: 'app-transfers',
@@ -32,6 +34,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
   from_account_currency = "";
   from_account_acctual_balance : number;
   from_account_available_balance : string;
+  from_account_available_balance_value: number;
   from_account_selected = false;
 
   to_account_no = "";
@@ -39,6 +42,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
   to_account_currency = "";
   to_account_acctual_balance : number;
   to_account_available_balance : string;
+  to_account_available_balance_value: number;
   to_account_selected = false;
 
   selected_transfer_type_value = "";
@@ -49,18 +53,20 @@ export class TransfersComponent implements OnInit, OnDestroy {
   transfer_amount_to_value : number;
 
   data2 = [];
+  dialogInfoTitles = ['Transfer Type', 'From Account', 'To Account', 'From Amount', 'To Amount', 'Description'];
+  dialogInfoContent = [];
   info_message_title = 'Transfer Details';
   info_message_button_text = "Continue";
   transfer_succeeded = true;
   transfer_error_message = "";
-  isValidDataForTransfer = false;
 
   constructor(private authService: AuthService, 
               private accountService: AccountService,
               private transferService: TransferService,
               private modalSuccess: ModalSuccessComponent,
               private modalInfo: ModalInfoComponent,
-              private router: Router) { }
+              private router: Router,
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     // this.isLoading = true;
@@ -102,6 +108,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
           this.from_account_type = account[0].account_type
           this.from_account_acctual_balance = account[0].actual_balance
           this.from_account_available_balance = parseFloat(account[0].available_balance.toString()).toFixed(2)
+          this.from_account_available_balance_value = parseFloat(account[0].available_balance.toString());
           if(parseFloat(this.from_account_available_balance) <= 0){
             this.from_account_selected = false
             //this.openModal(template)
@@ -138,6 +145,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
           this.to_account_type = account[0].account_type
           this.to_account_acctual_balance = account[0].actual_balance
           this.to_account_available_balance = parseFloat(account[0].available_balance.toString()).toFixed(2)
+          this.to_account_available_balance_value = parseFloat(account[0].available_balance.toString());
           this.to_account_selected = true
         }
         //notify app-money-field with account currency
@@ -158,6 +166,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
     this.from_account_type = ""
     this.from_account_acctual_balance = null
     this.from_account_available_balance = null
+    this.from_account_available_balance_value = null;
     this.from_account_currency = ""
     //this.currencyChangedSubject.next("");
     this.fromCurrencyChangedSubject.next("");
@@ -169,6 +178,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
     this.to_account_type = ""
     this.to_account_acctual_balance = null
     this.to_account_available_balance = null
+    this.to_account_available_balance_value = null;
     this.to_account_currency = ""
     //this.currencyToChangedSubject.next("");
     this.toCurrencyChangedSubject.next("");
@@ -178,6 +188,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
   setAmount(amount){
     // console.log("from amount", amount)
     this.transfer_amount_value = amount
+    // console.log("transfer_amount_value",this.transfer_amount_value)
     this.amountToChangedSubject.next(this.transfer_amount_value)
     //console.log(this.transfer_amount)
   }
@@ -187,7 +198,7 @@ export class TransfersComponent implements OnInit, OnDestroy {
     this.transfer_amount_to_value = amount
   }
 
-  transfer(form: NgForm, infoMessageTemplate: TemplateRef<any>){
+  transfer(form: NgForm/*, infoMessageTemplate: TemplateRef<any>*/){
     // console.log(form)
     // console.log("transfer_amount_value", this.transfer_amount_value)
     if(form.invalid 
@@ -196,9 +207,53 @@ export class TransfersComponent implements OnInit, OnDestroy {
       return;
     }
     else{
-      this.showInfoMessage(infoMessageTemplate);
-      //this.isValidDataForTransfer = true;
+      //this.showInfoMessage(infoMessageTemplate);
+      this.openConfirmationDialog();
     }
+  }
+
+  openConfirmationDialog(){
+    this.dialogInfoContent = []
+    this.dialogInfoContent.push('Internal Transfer')
+    this.dialogInfoContent.push(this.from_account_no)
+    this.dialogInfoContent.push(this.to_account_no)
+    this.dialogInfoContent.push(this.transfer_amount_value + " " +  this.selected_from_account_no_value.split('-')[1].trim())
+    this.dialogInfoContent.push(this.transfer_amount_to_value + " " + this.selected_to_account_no_value.split('-')[1].trim())
+    this.dialogInfoContent.push(this.description_value)
+    const dialogRef = this.dialog.open(DialogInfoComponent, {data: {title: "Transfer Details", contentTitle: this.dialogInfoTitles, contentData: this.dialogInfoContent}});
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        if(result && result == true){
+          this.transferService.createTransfer(parseInt(this.selected_transfer_type_value), 
+          this.selected_from_account_no_value.split('-')[0].trim(), 
+          this.selected_to_account_no_value.split('-')[0].trim(),
+          this.description_value,
+          this.transfer_amount_value,
+          this.transfer_amount_to_value,
+          this.selected_from_account_no_value.split('-')[1].trim(),
+          this.selected_to_account_no_value.split('-')[1].trim())
+                              .subscribe( 
+                              response => {
+                              if(response.status == "accepted"){
+                              console.log(response.refNumber);
+                              this.transfer_succeeded = true;
+                              this.router.navigate(['/success', response.refNumber]);
+                              }
+                              else if(response.status == "rejected"){
+
+
+                              }
+                              },
+                              error => {
+                              // this.transfer_error_message = error.error.description;
+                              // this.transfer_succeeded = false;
+                              // console.log(error)
+                              }
+                              );
+        }
+      }
+    )
   }
 
   transferConfirmed(confirmed: boolean, successMessageTemplate: TemplateRef<any>){

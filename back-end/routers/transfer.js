@@ -23,7 +23,7 @@ router.post("", auth, async (req, res) => {
         if(from_account && to_account && from_amount && to_amount){
             if(from_account == to_account)
             {
-                return res.status(400).send({ status: "rejected", description: "can not transfer within the same accounts!"})
+                return res.status(400).send({ status: "rejected", errorDescription: "Can't transfer within the same accounts!"})
             }
             const fromAccount = await Account.findOne({account_no: from_account})
             const toAccount = await Account.findOne({account_no: to_account})
@@ -76,7 +76,7 @@ router.post("", auth, async (req, res) => {
                     res.status(400).send(error)
                 })
             }else{
-                res.status(404).send({error: "accounts not found"})
+                res.status(404).send({status: "rejected", errorDescription: "Can't transfer within the same accounts!"})
             }
         }
     }catch(ex){

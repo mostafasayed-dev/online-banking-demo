@@ -3,7 +3,7 @@
     <div class="alert alert-danger" role="alert" *ngIf="!transfer_succeeded">
         <strong>Transfer Failed! </strong>—{{transfer_error_message}}
     </div>
-    <form (submit)="transfer(transferForm, infoMessageTemplate)" #transferForm="ngForm"
+    <form (submit)="transfer(transferForm)" #transferForm="ngForm"
         
         [ngClass]="transferForm.submitted ? 'was-validated' : 'needs-validation'" novalidate>
         <!-- transfer type -->
@@ -32,17 +32,19 @@
                 <div class="col-md-6">
                     <div class="d-flex justify-content-between">
                         <label for="to_account">From Account</label>
-                        <span class="badge bg-success-custome" *ngIf="from_account_selected">
+                        <span *ngIf="from_account_selected" 
+                              [ngClass]="from_account_available_balance_value <= 0 ? 'badge bg-danger' : 'badge bg-success-custome'">
                             {{from_account_available_balance}} {{from_account_currency}}</span>
                     </div>
                     <select class="form-select form-control-sm" id="from_account" name="from_account"
-                        (change)="getAccountFromData($event)" [(ngModel)]="selected_from_account_no_value" [ngClass]="(transferForm.controls.from_account?.touched 
+                        (change)="getAccountFromData($event)" [(ngModel)]="selected_from_account_no_value" 
+                        [ngClass]="(transferForm.controls.from_account?.touched 
                                     && transferForm.value.from_account == '')? 'is-invalid' : 
                                    (transferForm.controls.from_account?.touched 
                                     && transferForm.value.from_account != '') ? 'is-valid' : ''" required>
                         <option value="" selected>Choose...</option>
                         <option *ngFor="let account of accounts" [disabled]="account.available_balance == 0"
-                            [ngStyle]="account.available_balance == 0 ? {'color': 'rgb(200, 0, 0)'} : {} ">
+                            [ngStyle]="account.available_balance == 0 ? {'color': '#dc3545'} : {} ">
                             {{account.account_no}} - {{account.account_currency}}</option>
                     </select>
                     <div class="invalid-feedback">
@@ -53,7 +55,9 @@
                 <div class="col-md-6">
                     <div class="d-flex justify-content-between">
                         <label for="to_account">To Account</label>
-                        <span class="badge bg-success-custome" *ngIf="to_account_selected">
+                        <span 
+                            [ngClass]="to_account_available_balance_value > 0 ? 'badge bg-success-custome' : 'badge bg-danger-custome'" 
+                            *ngIf="to_account_selected">
                             {{to_account_available_balance}} {{to_account_currency}}</span>
                     </div>
                     <select class="form-select form-control-sm" id="to_account" name="to_account"
@@ -243,7 +247,10 @@
                 <!-- <button class="btn btn-default btn-transfer btn-block" 
                         type="submit"
                         (click)="showInfoMessage(infoMessageTemplate)"> -->
-                <button class="btn btn-default btn-transfer btn-block" type="submit">
+                <button class="btn btn-default btn-transfer btn-block" type="submit"
+                        [disabled]="transferForm.invalid 
+                                    || transfer_amount_value == 0 || transfer_amount_value == undefined
+                                    || transfer_amount_to_value == 0 || transfer_amount_to_value == undefined">
                     Transfer
                     <!-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     <span class="sr-only">Transfer...</span> -->
@@ -251,17 +258,17 @@
             </div>
         </div>
         <!-- success message -->
-        <ng-template #successMessageTemplate>
+        <!-- <ng-template #successMessageTemplate>
             <app-modal-success>
             </app-modal-success>
-        </ng-template>
+        </ng-template> -->
         <!-- Info message -->
-        <ng-template #infoMessageTemplate>
+        <!-- <ng-template #infoMessageTemplate>
             <app-modal-info [data1]="['From Account', 'To Account', 'From Amount', 'To Amount', 'Trasaction Date']"
                 [data2]="data2" [message_title]="info_message_title" [button1_text]="info_message_button_text"
                 (confirmed)="transferConfirmed($event, successMessageTemplate)">
             </app-modal-info>
-        </ng-template>
+        </ng-template> -->
     </form>
 </div>
 <app-spinner-x *ngIf="isLoading"></app-spinner-x>

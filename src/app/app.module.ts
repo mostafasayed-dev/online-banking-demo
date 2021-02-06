@@ -27,7 +27,9 @@ import { MoneyRateComponent } from './custome-controls/money-rate/money-rate.com
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { AboutUsComponent } from './views/about-us/about-us.component';
 import { RatesComponent } from './views/rates/rates.component';
-import { TransferDetailsComponent } from './views/transfer-details/transfer-details.component';
+import { DialogInfoComponent } from './custome-controls/dialog-info/dialog-info.component';
+import { ErrorInterceptor } from './interceptors/error-interceptor';
+import { DialogErrorComponent } from './custome-controls/dialog-error/dialog-error.component';
 
 
 @NgModule({
@@ -50,7 +52,8 @@ import { TransferDetailsComponent } from './views/transfer-details/transfer-deta
     MoneyRateComponent,
     AboutUsComponent,
     RatesComponent,
-    TransferDetailsComponent,
+    DialogInfoComponent,
+    DialogErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,10 @@ import { TransferDetailsComponent } from './views/transfer-details/transfer-deta
   ],
   providers: [ModalSuccessComponent, 
               ModalInfoComponent,
-              {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
-  bootstrap: [AppComponent]
+              {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+              {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}],
+  bootstrap: [AppComponent],
+    //tell angular for components which will not be used as a selector or as a component in the router 
+  entryComponents: [DialogInfoComponent, DialogErrorComponent]
 })
 export class AppModule { }

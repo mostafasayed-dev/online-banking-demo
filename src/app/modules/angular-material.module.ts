@@ -1,6 +1,6 @@
 
 import { NgModule } from '@angular/core';
-import { MatCardModule, MatDividerModule, MatTableModule } from '@angular/material';
+import { MatCardModule, MatDialogModule, MatDividerModule, MatTableModule } from '@angular/material';
 
 
 @NgModule({
@@ -9,6 +9,7 @@ import { MatCardModule, MatDividerModule, MatTableModule } from '@angular/materi
     exports:[ 
         MatCardModule,
         MatTableModule,
-        MatDividerModule ]//to be able to exports in another module
+        MatDividerModule,
+        MatDialogModule ]//to be able to exports in another module
 })
 export class AngularMaterialModule{}

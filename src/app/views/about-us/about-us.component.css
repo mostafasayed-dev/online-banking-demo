@@ -35,6 +35,17 @@ div.about-services {
     margin-bottom: 50px;
 }
 
+@media only screen and (max-width: 767px){
+    .about-services{
+        display: flex;
+        align-items: center;
+    }
+
+    .about-services div{
+        text-align: center;
+    }
+}
+
 @media only screen and (max-width: 465px){
     .about-header h1{
         font-size: xx-large;

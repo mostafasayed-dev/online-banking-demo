@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{this.data.title}}</h1>
+<div mat-dialog-content *ngFor="let title of titles; let i=index">
+  <!-- <div class="row">{{title}} {{contents[i]}}</div> -->
+  <div class="row">
+    <div class="col">
+      <h6>{{title}}</h6>
+    </div>
+    <div class="col">
+      <p>{{contents[i]}}</p>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+</div>
+<div mat-dialog-actions>
+  <button class="btn btn-default" [mat-dialog-close]="false">Close</button>
+  <button class="btn btn-default" [mat-dialog-close]="true">Ok</button>
+</div>
