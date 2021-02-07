@@ -31,6 +31,11 @@ import { DialogInfoComponent } from './custome-controls/dialog-info/dialog-info.
 import { ErrorInterceptor } from './interceptors/error-interceptor';
 import { DialogErrorComponent } from './custome-controls/dialog-error/dialog-error.component';
 
+// Make sure the module was imported with npm install before you reference it. You get strong typing and Intellisense support.
+// If you need to have globals exposed - globally for plug-ins or other non-typescript dependencies use
+import $ from 'jquery/dist/jquery';// loading jQuery via module loading 
+window["$"] = $;
+window["jQuery"] = $;
 
 @NgModule({
   declarations: [

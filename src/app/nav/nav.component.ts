@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { RimService } from '../services/rim.service';
 
+declare var $:any;
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -21,6 +22,13 @@ export class NavComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
+    $(document).ready(function() {
+      $('.navbar-nav>li>a').on('click', function(){
+        // alert("hello")
+        $('.navbar-collapse').collapse('hide');
+    });
+    });
+    
     this.loggedIn = this.authService.getIsAuthenticated()
     if(!this.loggedIn){
       this.router.navigate(['/'])
