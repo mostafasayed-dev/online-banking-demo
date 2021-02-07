@@ -23,16 +23,16 @@ router.post("/login", async (req, res) => {
         //console.log(req.body)
         const user = await User.findOne({username: req.body.username})
         if(!user){
-            return res.status(401).send({message: "authentication failed, invalid username!"})
+            return res.status(401).send({errorDescription: "authentication failed, invalid username or password!"})
         }else{
             if(user.status != 'active'){
-                return res.status(401).send({message: "authentication failed, user status not active!"})
+                return res.status(401).send({errorDescription: "authentication failed, user status not active!"})
             }
         }
 
         const isMatched = await bcrypt.compare(req.body.password, user.password);
         if(!isMatched){
-            return res.status(401).send({message: "authentication failed, invalid password!"})
+            return res.status(401).send({errorDescription: "authentication failed, invalid username or password!"})
         }
 
         const token = jwt.sign({
