@@ -43,8 +43,8 @@
                                    (transferForm.controls.from_account?.touched 
                                     && transferForm.value.from_account != '') ? 'is-valid' : ''" required>
                         <option value="" selected>Choose...</option>
-                        <option *ngFor="let account of accounts" [disabled]="account.available_balance == 0"
-                            [ngStyle]="account.available_balance == 0 ? {'color': '#dc3545'} : {} ">
+                        <option *ngFor="let account of accounts" [disabled]="account.available_balance <= 0"
+                            [ngStyle]="account.available_balance <= 0 ? {'color': '#dc3545'} : {} ">
                             {{account.account_no}} - {{account.account_currency}}</option>
                     </select>
                     <div class="invalid-feedback">
